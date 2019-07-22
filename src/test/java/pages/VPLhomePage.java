@@ -9,11 +9,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class VPLhomePage {
 
+
+    WebDriver browserDriver;
+
+    String homePageUrl = "http://www.vpl.ca";
     private static By userDashBoardXpath = By.xpath("//a[contains(text(),'Log In / My VPL')]");
-    private static By barCodeID = By.xpath("//input[@name='name']");
+    //private static By barCodeID = By.xpath("//input[@class='field_username text']");
+    private static By barCodeID = By.cssSelector("input[class='field_username text']");
     private static By pinID = By.xpath("//input[@name='user_pin']");
     private static By loginXpath = By.xpath ("//input[@title='Log In']");
     private static By errorXpath = By.xpath ("//p[@class='message-text']");
+    private static By searchTextBoxId = By.id("edit-search");
+    private static By searchButtonLocator = By.id("edit-submit");
+
+    public VPLhomePage (WebDriver driver) {
+        browserDriver = driver;
+    }
 
 
     public static WebElement userDashBoard (WebDriver driver) {
@@ -55,9 +66,26 @@ public class VPLhomePage {
 
         login(driver).sendKeys(Keys.RETURN);
     }
-    public static void open (WebDriver driver) {
+    public  void openPage() {
 
-        driver.get("http://www.vpl.ca/");
+        browserDriver.get(homePageUrl);
+    }
+
+    public void searchForKeyword(String keyword) {
+        typeSearchKeyword(keyword);
+        executeSearch();
+    }
+
+    private void typeSearchKeyword(String keyword) {
+        WebElement searchTextBox = browserDriver.findElement(searchTextBoxId);
+        searchTextBox.click();
+        searchTextBox.clear();
+        searchTextBox.sendKeys(keyword);
+    }
+
+    private void executeSearch() {
+        WebElement searchTextButton = browserDriver.findElement(searchButtonLocator);
+        searchTextButton.click();
     }
 
     public static boolean hasError (WebDriver driver) {
